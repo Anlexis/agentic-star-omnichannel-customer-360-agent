@@ -1,0 +1,23 @@
+# Runtime parameters — loaded by the registry and passed as Graph(config=...).
+# Separate from config/agent.yaml (the static manifest, which carries identity
+# and compile-time requirements only).
+#
+# Every key below has a live reader. The aggregation block is forwarded to the
+# inner workflow graph and seeded into its state, because node execute()
+# methods take no config argument — state seeding is the only route a runtime
+# value can travel into a domain node.
+
+max_retry: 3
+timeout_s: 30
+
+aggregation:
+  # Records beyond this cap are not aggregated. Read by the normalize step.
+  max_records: 50
+  # Total event count at or above which a profile is segmented as high
+  # frequency. Read by the unify step; changing it changes the segments in the
+  # released profile.
+  high_frequency_events: 10
+  # Cross-channel linkage confidence below which the resolved identity is
+  # reported as unlinked rather than as a linked customer. Read by the identity
+  # resolution step.
+  min_link_confidence: 0.5
